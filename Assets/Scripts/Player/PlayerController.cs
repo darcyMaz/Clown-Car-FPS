@@ -57,8 +57,8 @@ public class PlayerController : MonoBehaviour
         velVect.y = rigidbody.linearVelocity.y;
 
         // Values super close to zero will be set to zero.
-        velVect.x = (velVect.x < 0.001) ? 0 : velVect.x;
-        velVect.z = (velVect.z < 0.001) ? 0 : velVect.z;
+        // velVect.x = (velVect.x < 0.001 && movement.x == 0) ? 0 : velVect.x;
+        // velVect.z = (velVect.z < 0.001 && movement.y == 0) ? 0 : velVect.z;
 
         // Figure out how to normalize this properly later.
         if (HasRB)
@@ -66,8 +66,10 @@ public class PlayerController : MonoBehaviour
             // The goal of this code is to move in the direction based on the forward vector.
             // To be precise, Rotate() changes the forward vector based on Player.Look input. Here, we want the Player.Move input to move the player based on the forward vector.
             // If we move backwards, then we move in the Vector3.backwards direction. If we move right and forward, we move at the sum of that angle.
-            float directionHori = (velVect.x < 0) ? -1 : (velVect.x > 0) ? 1: 0;
-            float directionVert = (velVect.z < 0) ? -1 : (velVect.z > 0) ? 1: 0;
+            float directionHori = (velVect.x < -0.005) ? -1 : (velVect.x > 0.005) ? 1: 0;
+            float directionVert = (velVect.z < -0.005) ? -1 : (velVect.z > 0.005) ? 1: 0;
+            // Change these such that: less than 0.01 and greater than 0.01 results in zeroh
+
 
             // I'm sure this is the problem right?
             Vector3 forwardVect = transform.forward;
@@ -95,7 +97,7 @@ public class PlayerController : MonoBehaviour
             rotatedVel.z = angleMatrix[1, 0] * velVect.x + angleMatrix[1, 1] * velVect.z;
             rotatedVel.y = velVect.y;
 
-            // rigidbody.linearVelocity = rotatedVel;
+            rigidbody.linearVelocity = rotatedVel;
 
             
 
