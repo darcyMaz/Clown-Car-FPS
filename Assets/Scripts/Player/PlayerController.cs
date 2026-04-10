@@ -56,35 +56,45 @@ public class PlayerController : MonoBehaviour
         // No change to the y velocity in here.
         velVect.y = rigidbody.linearVelocity.y;
 
-        // Values super close to zero will be set to zero.
-        // velVect.x = (velVect.x < 0.001 && movement.x == 0) ? 0 : velVect.x;
-        // velVect.z = (velVect.z < 0.001 && movement.y == 0) ? 0 : velVect.z;
-
         // Figure out how to normalize this properly later.
         if (HasRB)
         {
             // The goal of this code is to move in the direction based on the forward vector.
             // To be precise, Rotate() changes the forward vector based on Player.Look input. Here, we want the Player.Move input to move the player based on the forward vector.
             // If we move backwards, then we move in the Vector3.backwards direction. If we move right and forward, we move at the sum of that angle.
-            float directionHori = (velVect.x < -0.005) ? -1 : (velVect.x > 0.005) ? 1: 0;
-            float directionVert = (velVect.z < -0.005) ? -1 : (velVect.z > 0.005) ? 1: 0;
-            // Change these such that: less than 0.01 and greater than 0.01 results in zeroh
+            float directionHori = (velVect.x < -0.008) ? -1f : (velVect.x > 0.008) ? 1f: 0;
+            float directionVert = (velVect.z < -0.008) ? -1f : (velVect.z > 0.008) ? 1f: 0;
+
+            // This is not how you do this vector.
+            // Take the forward vector and rotate it based on the player input.
+            // If it's going forward keep it the same, backwards flip it.
+            // If it's going right keep it the same, backwards flip it.
+            
+            Vector3 vertVect = (directionVert == 1) ? transform.forward: (directionVert == -1) ? -1f * transform.forward: Vector3.zero;
+            Vector3 horiVect = (directionHori == 1) ? new Vector3(transform.forward.z,transform.forward.y,-transform.forward.x) : (directionHori == -1) ? new Vector3(-transform.forward.z, transform.forward.y, transform.forward.x) : Vector3.zero;
+
+            Vector3 constructedForwardVect = vertVect + horiVect;
+
+            // This one has to flip 180 when you go backwards
+            // forwardVect.x = (directionHori == -1) ? forwardVect.x * -1: forwardVect.x;
+
+            // This one has to flip 90 when right and 270 when left
+            // forwardVect.z = (directionVert == -1) ? forwardVect.z * -1 : forwardVect.z;
+
+            // If you want to flip 180 degrees, you need to flip both components.
+            // If you want to flip 90 degrees, you need to swap the components bruh.
+
+            // If you press S, you make both components negative.
+            // If you press
 
 
-            // I'm sure this is the problem right?
-            Vector3 forwardVect = transform.forward;
-            forwardVect.x *= directionHori;
-            forwardVect.z *= directionVert;
-            forwardVect = forwardVect.normalized;
-
-            // velvect.x and z can't be negative for some reason???
-            Debug.Log("forwardVect: " + forwardVect);
+            Debug.Log("forwardVect: " + constructedForwardVect);
             Debug.Log("transform.forwards: " + transform.forward);
             Debug.Log("direction vals: " + directionHori + " " + directionVert);
             Debug.Log("velVect vals " + velVect.x + " " + velVect.z);
 
             //Calculate angle between the velocity vector and the created forward vector.
-            float theta = Mathf.Atan2(velVect.x * forwardVect.z - velVect.z * forwardVect.x, velVect.x * forwardVect.x + velVect.z * forwardVect.z);
+            float theta = Mathf.Atan2(velVect.x * constructedForwardVect.z - velVect.z * constructedForwardVect.x, velVect.x * constructedForwardVect.x + velVect.z * constructedForwardVect.z);
             float[,] angleMatrix =
             {
                 { Mathf.Cos(theta),-Mathf.Sin(theta) },
