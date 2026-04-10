@@ -108,32 +108,6 @@ public class PlayerController : MonoBehaviour
             rotatedVel.y = velVect.y;
 
             rigidbody.linearVelocity = rotatedVel;
-
-            
-
-            /*
-            Vector3 linearVelocity = new Vector3(velVect.x * targetVelocity.x, rigidbody.linearVelocity.y, velVect.z * targetVelocity.y);
-
-            // 1) Calculate angle between the linearVelocity vector and the forward vector.
-            // 2) Rotate the linearVelocity vector by that angle.
-
-            float theta = Mathf.Atan2(linearVelocity.x * transform.forward.z - linearVelocity.z * transform.forward.x, linearVelocity.x * transform.forward.x + linearVelocity.z * transform.forward.z);
-            float[,] angleMatrix = 
-            { 
-                { Mathf.Cos(theta),-Mathf.Sin(theta) },
-                { Mathf.Sin(theta), Mathf.Cos(theta) } 
-            };
-
-            // Pseudo code: linearVelocity = angleMatrix * linearVelocity;
-            Vector3 rotatedLinVel = Vector3.zero;
-            rotatedLinVel.x = angleMatrix[0, 0] * linearVelocity.x + angleMatrix[0, 1] * linearVelocity.z;
-            rotatedLinVel.z = angleMatrix[1, 0] * linearVelocity.x + angleMatrix[1, 1] * linearVelocity.z;
-            rotatedLinVel.y = linearVelocity.y;
-
-            Debug.Log(rotatedLinVel + " " + linearVelocity);
-
-            rigidbody.linearVelocity = rotatedLinVel;
-            */
         }
     }
 
