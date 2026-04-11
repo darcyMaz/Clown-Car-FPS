@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,11 +14,18 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions actions;
     private InputAction move;
     private InputAction look;
+    private InputAction attack;
 
     // Movement vars
     private Vector3 velVect = Vector3.zero;
     [SerializeField] private float SmoothTime = 5;
     [SerializeField] private Vector2 targetVelocity = new Vector2(6,10);
+
+    // Attack vars
+    [SerializeField] private Transform CameraTransform;
+    [SerializeField] private LayerMask enemyMask;
+    [SerializeField] private float MaxShootingDistance;
+    [SerializeField] private int ShootingDamage = 1;
 
     private void Awake()
     {
@@ -24,13 +33,9 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         actions = new InputSystem_Actions();
-
-        // if (rigidbody != null) HasRB = true;
-
         
         if (!TryGetComponent(out rigidbody)) Debug.Log("The PlayerController component could not find a RigidBody");
         else HasRB = true;
-        
     }
 
     private void OnEnable()
@@ -40,7 +45,12 @@ public class PlayerController : MonoBehaviour
 
         look = actions.Player.Look;
         look.Enable();
+
+        attack = actions.Player.Attack;
+        attack.performed += Attack;
+        attack.Enable();
     }
+
     private void OnDisable()
     {
         move.Disable();
@@ -70,6 +80,11 @@ public class PlayerController : MonoBehaviour
 
             // The goal of this code is to move in the direction based on the forward vector.
             // To be precise, Rotate() changes the forward vector based on Player.Look input. Here, we want the Player.Move input to move the player based on the forward vector.
+
+            // We will construct a new Vector based on the input received.
+            // Positive, negative, or zero direction forward and backwards.
+            // So there can be 9 possible InputVectors.
+            // Forward-Zero, Forward-Right, Forward-Left, Backwards-0, BR, BL, 00, 0R, 0L 
             float directionHori = (velVect.x < -0.1) ? -1f : (velVect.x > 0.1) ? 1f: 0;
             float directionVert = (velVect.z < -0.1) ? -1f : (velVect.z > 0.1) ? 1f: 0;
 
@@ -117,6 +132,27 @@ public class PlayerController : MonoBehaviour
         {
             Rotate();
             Move();
+        }
+    }
+    
+    private void Attack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            RaycastHit hit;
+            bool didHit = Physics.Raycast(CameraTransform.position, transform.forward, out hit, MaxShootingDistance, enemyMask);
+
+            // I should probably replace this with a "Shootable Object" class. Whatever.
+
+            if (didHit)
+            {
+                EnemyHealth enemyHealth;
+                if (!hit.transform.gameObject.TryGetComponent(out enemyHealth)) Debug.Log("A GameObject with the Enemy LayerMask was shot at but it does not have an EnemyHealth component");
+                else
+                {
+                    enemyHealth.ChangeHealth(ShootingDamage * -1);
+                }
+            }
         }
     }
 }
