@@ -1,14 +1,9 @@
 using UnityEngine;
 using UnityEngine.AI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class EnemyMovement : MonoBehaviour
 {
-    // make this a navmeshagent
-    // make some states
-    // do a sphere check for the player
-    // if we are with run range, run to them.
-    // if we are within throwing range, throw pie at them
-    // simple as
 
     // Navmesh Agent
     private NavMeshAgent agent;
@@ -16,9 +11,15 @@ public class EnemyMovement : MonoBehaviour
 
     // Search vars
     [SerializeField] private float CircleSearch = 50f;
-    private float ThrowDistance = 0f;
+    private float AttackDistance = 0f;
     [SerializeField] private LayerMask PlayerLayer;
+    // Target vars
     private Collider target;
+    private float TargetDistance = float.MaxValue;
+    private NavMeshPath TargetPath;
+
+    // Animation vars
+    private bool IsAttacking = false;
 
     // Misc vars
     [SerializeField] private int MaxPlayersInGame = 12;
@@ -43,7 +44,7 @@ public class EnemyMovement : MonoBehaviour
         {
             // The Enemy will attack once it reaches the stop distance.
             // It's possible that there needs to be a bit of tolerance for this to work.
-            ThrowDistance = agent.stoppingDistance;
+            AttackDistance = agent.stoppingDistance;
 
             FindTarget();
         }
@@ -53,10 +54,18 @@ public class EnemyMovement : MonoBehaviour
     {
         if (HasAgent)
         {
-            if (FindTarget())
+            if (FindTarget() && !IsAttacking)
             {
                 // Go towards target.
-                // Ok so do i want to restart search every frame??? Uuuh yes?
+                agent.path = TargetPath;
+                agent.isStopped = false;
+
+                // Try to attack target, check if we meet requirements to.
+                TryAttack();
+            }
+            else
+            {
+                agent.isStopped = true;
             }
         }
     }
@@ -67,26 +76,84 @@ public class EnemyMovement : MonoBehaviour
         Collider[] targetsHit = new Collider[MaxPlayersInGame];
         int hitTotal = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, targetsHit);
 
-        // Go through each target hit and find the closest one.
-        // This assumes that the targetsHit array at 0 is not always the closest one.
-        // I will assume it is for brevity.
-
         if (hitTotal == 0)
         {
             return false;
         }
-        else
+        else if (hitTotal == 1)
         {
+            // Set the only path to be the target path.
+
+            NavMeshPath nmp = new NavMeshPath();
+            agent.CalculatePath(targetsHit[0].transform.position, nmp);
+
+            float distance = 0f;
+            for (int pathIndex = 1; pathIndex < nmp.corners.Length; pathIndex++)
+            {
+                distance += Vector3.Distance(nmp.corners[pathIndex - 1], nmp.corners[pathIndex]);
+            }
+
             target = targetsHit[0];
+            TargetDistance = distance;
+            TargetPath = nmp;
+
             return true;
         }
+        else
+        {
+            // This code here selects the closest Collider found by the Sphere Search.
+            // I am not certain whether these colliders are sorted by distance so I did this in case it is not.
 
-        //NavMeshPath nmp = new NavMeshPath();
-        //agent.CalculatePath(new Vector3(), nmp);
-        
-        // Use the corners to calculate the distance
+            Collider closestCollider = targetsHit[0];
+            float shortestDistance = float.MaxValue;
+
+            for (int targetIndex = 0; targetIndex < targetsHit.Length; targetIndex++)
+            {
+                NavMeshPath nmp = new NavMeshPath();
+                agent.CalculatePath(targetsHit[targetIndex].transform.position, nmp);
+
+                float distance = 0f;
+                for (int pathIndex = 1; pathIndex < nmp.corners.Length; pathIndex++)
+                {
+                    distance += Vector3.Distance(nmp.corners[pathIndex - 1], nmp.corners[pathIndex]);
+                }
+
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    closestCollider = targetsHit[targetIndex];
+                    TargetPath = nmp;
+                }
+            }
+
+            return true;
+        }
     }
 
+    private bool TryAttack()
+    {
+        // Return false if the path to the target is too long.
+        if (TargetDistance > AttackDistance)
+        {
+            return false;
+        }
+
+        // Return false if this enemy cannot see the player.
+        //   At this stage, I have the player's collider. So, I can just make a ray cast directly at the player.
+        //   False means something's in the way. True means we can see the player.
+        //   False can also be a distance thing but that shouldn't matter.
+        // bool CanSeePlayer = Physics.Raycast();
+
+        // Perform the attack and then return true.
+        //   Set animation bool to true.
+        //   Spawn in a pie
+        //   God do I need to code the pie so that it stays on the hand until thrown and then move towards where the player was? Yes lol.
+
+        // Stop moving towards the path.
+        agent.isStopped = true;
+
+        return true;
+    }
 
     // I need the clown to see the player
     // In order to attack the player there needs to be a sightline + distance requirement.
