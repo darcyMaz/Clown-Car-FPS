@@ -20,6 +20,8 @@ public class EnemyMovement : MonoBehaviour
 
     // Animation vars
     private bool IsAttacking = false;
+    private Animator animator;
+    private bool HasAnimator = false;
 
     // Misc vars
     [SerializeField] private int MaxPlayersInGame = 12;
@@ -36,6 +38,9 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!TryGetComponent(out agent)) Debug.Log("An EnemyMovement Script could not find its corresponding NavMeshAgent component.");
         else HasAgent = true;
+
+        if (!TryGetComponent(out animator)) Debug.Log("An EnemyMovement Script could not find its corresponding Animator component.");
+        else HasAnimator = true;
     }
 
     private void Start()
@@ -52,8 +57,11 @@ public class EnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (HasAgent)
+        if (HasAgent && false)
         {
+            // So this AI does search for players every frame.
+            // This won't be super inefficient but maybe there's a better way.
+            // I don't think so tho lol.
             if (FindTarget() && !IsAttacking)
             {
                 // Go towards target.
@@ -73,8 +81,15 @@ public class EnemyMovement : MonoBehaviour
     private bool FindTarget()
     {
         //Collider[] targetsHit = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, PlayerLayer);
-        Collider[] targetsHit = new Collider[MaxPlayersInGame];
-        int hitTotal = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, targetsHit);
+        Collider[] targetsHitTemp = new Collider[MaxPlayersInGame];
+        int hitTotal = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, targetsHitTemp, PlayerLayer);
+
+        // Move targets hit to an array of an exact size.
+        Collider[] targetsHit = new Collider[hitTotal];
+        for (int i=0;i<hitTotal;i++)
+        {
+            targetsHit[i] = targetsHitTemp[i];
+        }
 
         if (hitTotal == 0)
         {
@@ -107,7 +122,7 @@ public class EnemyMovement : MonoBehaviour
             Collider closestCollider = targetsHit[0];
             float shortestDistance = float.MaxValue;
 
-            for (int targetIndex = 0; targetIndex < targetsHit.Length; targetIndex++)
+            for (int targetIndex = 0; targetIndex < hitTotal; targetIndex++)
             {
                 NavMeshPath nmp = new NavMeshPath();
                 agent.CalculatePath(targetsHit[targetIndex].transform.position, nmp);
@@ -138,28 +153,27 @@ public class EnemyMovement : MonoBehaviour
             return false;
         }
 
-        // Return false if this enemy cannot see the player.
-        //   At this stage, I have the player's collider. So, I can just make a ray cast directly at the player.
-        //   False means something's in the way. True means we can see the player.
-        //   False can also be a distance thing but that shouldn't matter.
-        // bool CanSeePlayer = Physics.Raycast();
-
-        // Perform the attack and then return true.
-        //   Set animation bool to true.
-        //   Spawn in a pie
-        //   God do I need to code the pie so that it stays on the hand until thrown and then move towards where the player was? Yes lol.
+        // If the enemy can see the player / the view of the player is not obscured.
+        //      Think about putting on offset in the y position for this
+        if (!Physics.Raycast
+            (
+                transform.position, 
+                new Vector3(target.transform.position.x - transform.position.x, target.transform.position.y - transform.position.y, target.transform.position.z - transform.position.z),
+                AttackDistance * 2,
+                PlayerLayer
+            )
+           )
+        {
+            return false;
+        }
 
         // Stop moving towards the path.
         agent.isStopped = true;
+        // Trigger the pie throw.
+        animator.SetTrigger("ThrowPie");
+        IsAttacking = true;
 
         return true;
     }
 
-    // I need the clown to see the player
-    // In order to attack the player there needs to be a sightline + distance requirement.
-
-    // what i can try is...
-
-    // Check raw distance, if we're close enough start chasing
-    // Approach until (can see player && within throwing distance)
 }

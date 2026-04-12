@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 165066677}
   - component: {fileID: 165066682}
   - component: {fileID: 165066683}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1456,7 @@ MonoBehaviour:
   CircleSearch: 50
   PlayerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   MaxPlayersInGame: 12
 --- !u!1 &1336079454 stripped
 GameObject:
