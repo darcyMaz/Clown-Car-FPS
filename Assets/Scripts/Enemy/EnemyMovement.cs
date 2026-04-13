@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -57,16 +56,25 @@ public class EnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (HasAgent && false)
+        if (HasAgent)
         {
+            bool foundTarget = FindTarget();
+            Debug.Log("Found target: " + foundTarget + " isAttacking: " + IsAttacking);
+
             // So this AI does search for players every frame.
             // This won't be super inefficient but maybe there's a better way.
             // I don't think so tho lol.
-            if (FindTarget() && !IsAttacking)
+            if (foundTarget && !IsAttacking)
             {
+                
+
                 // Go towards target.
-                agent.path = TargetPath;
+                //agent.path = TargetPath;
+                //agent.isStopped = false;
+                agent.SetPath(TargetPath);
                 agent.isStopped = false;
+
+
 
                 // Try to attack target, check if we meet requirements to.
                 TryAttack();
@@ -80,7 +88,6 @@ public class EnemyMovement : MonoBehaviour
 
     private bool FindTarget()
     {
-        //Collider[] targetsHit = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, PlayerLayer);
         Collider[] targetsHitTemp = new Collider[MaxPlayersInGame];
         int hitTotal = Physics.OverlapSphereNonAlloc(transform.position, CircleSearch, targetsHitTemp, PlayerLayer);
 
@@ -150,6 +157,7 @@ public class EnemyMovement : MonoBehaviour
         // Return false if the path to the target is too long.
         if (TargetDistance > AttackDistance)
         {
+            Debug.Log("Try attack too far");
             return false;
         }
 
@@ -164,16 +172,25 @@ public class EnemyMovement : MonoBehaviour
             )
            )
         {
+            Debug.Log("Try attack can't see player");
             return false;
         }
 
         // Stop moving towards the path.
         agent.isStopped = true;
+        // Look at the player
+        transform.LookAt(target.transform);
         // Trigger the pie throw.
-        animator.SetTrigger("ThrowPie");
+        if (HasAnimator) animator.SetTrigger("ThrowPie");
         IsAttacking = true;
+
+        Debug.Log("Try attack true");
 
         return true;
     }
 
+    public void AttackDone()
+    {
+        IsAttacking = false;
+    }
 }

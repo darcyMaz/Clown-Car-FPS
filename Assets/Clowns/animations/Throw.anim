@@ -13704,18 +13704,18 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.00028494245
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.x
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -13725,7 +13725,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.002277344
+        value: 0.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -13733,8 +13733,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.85
-        value: -0.03
+        time: 2.8333333
+        value: 0.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -13745,7 +13745,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.y
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -13755,7 +13755,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.0084798625
+        value: 0.2
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2.8333333
+        value: 2.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -13766,7 +13775,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.z
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -14040,8 +14049,8 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1672433849
-      attribute: 1394318531
+      path: 0
+      attribute: 3390229881
       script: {fileID: 0}
       typeID: 136
       customType: 0
@@ -14229,7 +14238,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1672433849
+      path: 0
       attribute: 605858901
       script: {fileID: 0}
       typeID: 136
@@ -14238,8 +14247,8 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1672433849
-      attribute: 3390229881
+      path: 0
+      attribute: 1394318531
       script: {fileID: 0}
       typeID: 136
       customType: 0
@@ -14252,7 +14261,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.85
+    m_StopTime: 2.8333335
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -68448,18 +68457,18 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.00028494245
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.x
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -68469,7 +68478,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.002277344
+        value: 0.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -68477,8 +68486,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.85
-        value: -0.03
+        time: 2.8333333
+        value: 0.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -68489,7 +68498,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.y
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -68499,7 +68508,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.0084798625
+        value: 0.2
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2.8333333
+        value: 2.8
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -68510,7 +68528,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Center.z
-    path: head.002
+    path: 
     classID: 136
     script: {fileID: 0}
     flags: 0
@@ -105705,4 +105723,11 @@ AnimationClip:
     flags: 0
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 2.8333333
+    functionName: AttackDone
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
