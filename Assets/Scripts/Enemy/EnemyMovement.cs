@@ -29,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private int MaxPlayersInGame = 12;
 
     public event Action <Vector3> OnAttack;
+    public event Action OnPieThrown;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -278,5 +279,10 @@ public class EnemyMovement : MonoBehaviour
         if (HasAnimator) animator.SetTrigger("AttackDone");
         IsAttacking = false;
         RestTimer = RestTime;
+    }
+
+    public void ThrowPie()
+    {
+        OnPieThrown?.Invoke();
     }
 }

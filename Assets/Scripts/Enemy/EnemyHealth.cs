@@ -1,11 +1,12 @@
 using System;
+using System.ComponentModel;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
     // Health Data
     [SerializeField] private int MaxHealth = 10;
-    private int health;
+    [SerializeField] private int health;
 
     // C# Events
     public event Action <int> OnHealthChanged;

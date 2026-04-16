@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Pie : MonoBehaviour
@@ -16,6 +17,12 @@ public class Pie : MonoBehaviour
 
     private Rigidbody rigidBody;
 
+    private EnemyMovement em;
+    private bool IsEMSet = false;
+
+    [SerializeField] private float Speed = 3f;
+    [SerializeField] private int Damage = 2;
+
     private void Awake()
     {
         if (!TryGetComponent(out rigidBody))
@@ -23,6 +30,13 @@ public class Pie : MonoBehaviour
             Debug.Log("A Pie was instantiated but had no RigidBody. It was destroyed.");
             Destroy(gameObject);
         }
+
+        rigidBody.useGravity = false;
+    }
+
+    private void OnDisable()
+    {
+        if (IsEMSet) em.OnPieThrown -= PieThrown;
     }
 
     private void FixedUpdate()
@@ -50,7 +64,8 @@ public class Pie : MonoBehaviour
     private void InHand()
     {
         // Stick pie to the hand
-        if (IsHandSet) transform.position = Hand.position;
+        if (IsHandSet && Hand != null) transform.position = Hand.position;
+        else { State = 2; rigidBody.useGravity = true; }
 
         // Look at the player but not its y component. I.e. don't tilt the pie down at the player while it's in the hand.
         rigidBody.transform.LookAt(new Vector3(Target.x, transform.position.y, Target.z));
@@ -58,12 +73,14 @@ public class Pie : MonoBehaviour
 
     private void Throwing()
     {
-        rigidBody.MovePosition(Vector3.MoveTowards(rigidBody.transform.position, Target, 1));
+        rigidBody.MovePosition(Vector3.MoveTowards(rigidBody.transform.position, Target, Speed));
+        // transform.position = Vector3.MoveTowards(rigidBody.transform.position, Target, 10);
 
         // If we reach the destination without hitting anything, start falling.
         if ((Target - transform.position).magnitude < 0.1)
         {
             State = 2;
+            rigidBody.useGravity = true;
         }
     }
 
@@ -88,7 +105,12 @@ public class Pie : MonoBehaviour
             {
                 // try get player health
                 // decrement health
-                Debug.Log("Hit player!");
+                PlayerHealth ph;
+
+                if (other.gameObject.TryGetComponent(out ph))
+                {
+                    ph.ChangeHealth(-Damage);
+                }
             }
             else { Debug.Log("Hit not player!"); }
         }
@@ -97,9 +119,9 @@ public class Pie : MonoBehaviour
         // Play a noise, particle effect, etc
     }
 
-    public void SetState(int state)
+    public void PieThrown()
     {
-        State = state;
+        State = 1;
     }
     public void SetHand(Transform hand)
     {
@@ -117,6 +139,14 @@ public class Pie : MonoBehaviour
             IsTargetSet = true;
         }
     }
+    public void SetEnemyMovement(EnemyMovement eM)
+    {
+        if (IsEMSet) return;
+        IsEMSet = true;
+        em = eM;
+        em.OnPieThrown += PieThrown;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {

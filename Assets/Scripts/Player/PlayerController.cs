@@ -137,19 +137,33 @@ public class PlayerController : MonoBehaviour
     
     private void Attack(InputAction.CallbackContext context)
     {
+        
+
         if (context.performed)
         {
+            Debug.Log("Attack pressed");
+
+
+
             RaycastHit hit;
-            bool didHit = Physics.Raycast(CameraTransform.position, transform.forward, out hit, MaxShootingDistance, enemyMask);
+            bool didHit = Physics.Raycast(CameraTransform.position, transform.forward * MaxShootingDistance, out hit, MaxShootingDistance, enemyMask);
+
+
+            Debug.DrawRay(CameraTransform.position, transform.forward * MaxShootingDistance, Color.green, 10);
+
+
 
             // I should probably replace this with a "Shootable Object" class. Whatever.
-
             if (didHit)
             {
+                Debug.Log("Something was hit: " + hit.transform.name);
+
                 EnemyHealth enemyHealth;
                 if (!hit.transform.gameObject.TryGetComponent(out enemyHealth)) Debug.Log("A GameObject with the Enemy LayerMask was shot at but it does not have an EnemyHealth component");
                 else
                 {
+                    Debug.Log("Enemy Hit");
+
                     enemyHealth.ChangeHealth(ShootingDamage * -1);
                 }
             }
