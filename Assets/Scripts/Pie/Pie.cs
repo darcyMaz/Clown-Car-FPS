@@ -116,12 +116,13 @@ public class Pie : MonoBehaviour
         }
         Destroy(gameObject);
 
-        // Play a noise, particle effect, etc
+        SoundManager.PlaySound(SoundManager.SFX.SPLAT);
     }
 
     public void PieThrown()
     {
         State = 1;
+        SoundManager.PlaySound(SoundManager.SFX.THROW);
     }
     public void SetHand(Transform hand)
     {
