@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private InputAction move;
     private InputAction look;
     private InputAction attack;
+    private InputAction interact;
+    private InputAction pause;
 
     // Movement vars
     private Vector3 velVect = Vector3.zero;
@@ -26,6 +28,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask enemyMask;
     [SerializeField] private float MaxShootingDistance;
     [SerializeField] private int ShootingDamage = 1;
+
+    [SerializeField] private GameObject pausePanel;
 
     private void Awake()
     {
@@ -49,12 +53,32 @@ public class PlayerController : MonoBehaviour
         attack = actions.Player.Attack;
         attack.performed += Attack;
         attack.Enable();
+
+        interact = actions.Player.Interact;
+        interact.performed += DialogueNext;
+        interact.Enable();
+
+        pause = actions.Player.Pause;
+        pause.performed += PauseGame;
+        pause.Enable();
+    }
+
+    private void PauseGame(InputAction.CallbackContext context)
+    {
+        pausePanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void UnpauseGame()
+    {
+        pausePanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnDisable()
     {
         move.Disable();
         look.Disable();
+        interact.Disable();
     }
 
     private void Move()
@@ -134,7 +158,21 @@ public class PlayerController : MonoBehaviour
             Move();
         }
     }
-    
+
+    private void DialogueNext(InputAction.CallbackContext context)
+    {
+        //Debug.Log("DialogueNext activated!!!");
+
+        if (context.performed)
+        {
+            if (DialogueManager.Instance.IsDialogueOngoing())
+            {
+                DialogueManager.Instance.NextDialogue();
+            }
+        }
+
+    }
+
     private void Attack(InputAction.CallbackContext context)
     {
         
@@ -149,15 +187,12 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             bool didHit = Physics.Raycast(CameraTransform.position, transform.forward * MaxShootingDistance, out hit, MaxShootingDistance, enemyMask);
 
-
             Debug.DrawRay(CameraTransform.position, transform.forward * MaxShootingDistance, Color.green, 10);
-
-
 
             // I should probably replace this with a "Shootable Object" class. Whatever.
             if (didHit)
             {
-                Debug.Log("Something was hit: " + hit.transform.name);
+                //Debug.Log("Something was hit: " + hit.transform.name);
 
                 EnemyHealth enemyHealth;
                 if (!hit.transform.gameObject.TryGetComponent(out enemyHealth)) Debug.Log("A GameObject with the Enemy LayerMask was shot at but it does not have an EnemyHealth component");

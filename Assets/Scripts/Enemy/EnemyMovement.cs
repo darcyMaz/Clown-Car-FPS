@@ -47,6 +47,8 @@ public class EnemyMovement : MonoBehaviour
         {
             SoundManager.PlaySound(SoundManager.SFX.FOOTSTEPS);
         }
+
+        //Debug.Log();
     }
 
     private void FixedUpdate()
@@ -162,7 +164,7 @@ public class EnemyMovement : MonoBehaviour
         // Return false if the path to the target is too long.
         if (TargetDistance > AttackDistance)
         {
-            //Debug.Log("Try attack too far");
+            Debug.Log("Try attack too far");
             return false;
         }
 
@@ -179,7 +181,7 @@ public class EnemyMovement : MonoBehaviour
              )
            )
         {
-            //Debug.Log("Attack failed, enemy obstructed: " + hit_temp.transform.name + " LayerMask: " + Convert.ToString(~(0) - (1 << PlayerLayer), 2));
+            Debug.Log("Attack failed, enemy obstructed: " + hit_temp.transform.name + " LayerMask: " + Convert.ToString(~(0) - (1 << PlayerLayer), 2));
             return false;
         }
 
@@ -237,7 +239,7 @@ public class EnemyMovement : MonoBehaviour
             
            )
         {
-            //Debug.Log("Try attack can't see player");
+            Debug.Log("Try attack can't see player");
             //Debug.DrawRay(
              //   transform.position,
             //    new Vector3(target.transform.position.x - transform.position.x, target.transform.position.y - transform.position.y, target.transform.position.z - transform.position.z),
@@ -248,10 +250,10 @@ public class EnemyMovement : MonoBehaviour
         
 
         // If the enemy is not looking right at the player.
-        if (!Physics.Raycast(transform.position, transform.forward, AttackDistance, PlayerLayer))
+        if (!Physics.Raycast(transform.position, AttackDistance * 2 * transform.forward, AttackDistance * 10, PlayerLayer))
         {
-            //Debug.Log("Try attack false, not looking right at the player.");
-            //Debug.DrawRay(transform.position, transform.forward, Color.green, AttackDistance);
+            Debug.Log("Try attack false, not looking right at the player.");
+            Debug.DrawRay(transform.position + new Vector3(0,1,0), AttackDistance * transform.forward, Color.green, 10);
 
             float theta = Mathf.Atan2(transform.forward.x * basicSightline.z - transform.forward.z * basicSightline.x, transform.forward.x * basicSightline.x + transform.forward.z * basicSightline.z);
             float rotate_dir = (theta > 0) ? -1 : 1;
@@ -263,7 +265,7 @@ public class EnemyMovement : MonoBehaviour
 
         Attack();
 
-        //Debug.Log("Try attack true");
+        Debug.Log("Try attack true");
 
         return true;
     }

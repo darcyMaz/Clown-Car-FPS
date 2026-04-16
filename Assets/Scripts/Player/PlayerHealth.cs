@@ -32,6 +32,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Death()
     {
-        Debug.Log("Player has died!");
+        SceneManager.Instance.BufferSceneChange("Start Menu");
     }
 }

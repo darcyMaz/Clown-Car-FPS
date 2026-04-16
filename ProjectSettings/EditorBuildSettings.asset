@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test Player.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Start Menu.unity
+    guid: 0361e6759d477394881eb44ebfd06bac
+  - enabled: 1
+    path: Assets/Scenes/Clown Car.unity
+    guid: d79bf8ae244d8ca43a6f6d734dcdd9be
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e4f79507784c0f445af5fe068352c0c9, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

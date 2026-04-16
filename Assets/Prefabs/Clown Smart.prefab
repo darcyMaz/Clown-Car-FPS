@@ -1134,7 +1134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   CircleSearch: 50
-  AttackDistance: 10
+  AttackDistance: 12
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 256

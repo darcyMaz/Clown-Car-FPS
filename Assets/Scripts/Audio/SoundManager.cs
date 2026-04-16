@@ -15,6 +15,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip[] soundList;
     private static SoundManager instance;
     private AudioSource audioSource;
+    private bool HasAudioSource = false;
 
     private void Awake()
     {
@@ -23,12 +24,15 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        // audioSource = GetComponent<AudioSource>();
+
+        if (!TryGetComponent(out audioSource)) Debug.Log("The Sound Manager did not have an AudioSource attached. It will not play sounds.");
+        else HasAudioSource = true;
     }
 
     public static void PlaySound(SFX sound, float volume = 1)
     {
-        instance.audioSource.PlayOneShot(instance.soundList[(int)sound], volume);
+        if (instance.HasAudioSource) instance.audioSource.PlayOneShot(instance.soundList[(int)sound], volume);
     }
     void Update()
     {

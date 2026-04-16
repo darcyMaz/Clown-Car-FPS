@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,19 +9,20 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CharacterName;
     [SerializeField] private TextMeshProUGUI Dialogue;
     [SerializeField] private Image Background;
+    [SerializeField] private TextMeshProUGUI InteractPrompt;
 
-    // make it an instance singleton
     public static DialogueManager Instance { get; private set; }
 
     private bool IsDialogueActive = false;
     private Dialogue[] Dialogues;
-    private Sprite[] Sprites;
+    //private Sprite[] Sprites;
     private int DialoguesIndex = 0;
 
     private float backgroundAlpha = 0;
     //private float dialogueAlpha = 0;
     private float dialogueImageAlpha = 0;
     //private float charNameAlpha = 0;
+
 
     private void Awake()
     {
@@ -30,11 +32,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
 
-    // Everything is on on Awake, turned off on start.
-    private void Start()
-    {
         backgroundAlpha = Background.color.a;
         //dialogueAlpha = Dialogue.color.a;
         dialogueImageAlpha = DialogueImage.color.a;
@@ -44,18 +42,22 @@ public class DialogueManager : MonoBehaviour
         DialogueOff();
         DialogueImageOff();
         CharacterNameOff();
+        InteractPromptOff();
     }
 
-    public bool StartDialogue(Dialogue[] dialogues, Sprite[] sprites)
+
+    public bool StartDialogue(Dialogue[] dialogues)
     {
         if (IsDialogueActive) return false;
         IsDialogueActive = true;
 
         Dialogues = dialogues;
-        Sprites = sprites;
+
+        //Debug.Log("Dialogues length in StartDialogue" + Dialogues.Length);
 
         BackgroundOn();
         SetDialogue();
+        InteractPromptOn();
 
         return true;
     }
@@ -67,6 +69,7 @@ public class DialogueManager : MonoBehaviour
         if (DialoguesIndex == Dialogues.Length)
         {
             EndDialogue();
+            return true;
         }
 
         SetDialogue();
@@ -77,21 +80,23 @@ public class DialogueManager : MonoBehaviour
     {
         DialoguesIndex = 0;
         Dialogues = new Dialogue[0];
-        Sprites = new Sprite[0];
 
         DialogueOff();
         BackgroundOff();
         CharacterNameOff();
         DialogueImageOff();
+        InteractPromptOff();
 
         IsDialogueActive = false;
     }
 
     private void SetDialogue()
     {
-        SetDialogueText(Dialogues[DialoguesIndex].text);
-        SetDialogueImage(Sprites[Dialogues[DialoguesIndex].charSpriteIndex]);
-        SetCharacterName(Dialogues[DialoguesIndex].charName);
+        // THIS NEEDS CHECKS FOR INDEX OUT OF RANGE
+
+        SetDialogueText(Dialogues[DialoguesIndex].GetText());
+        SetDialogueImage(Dialogues[DialoguesIndex].GetSprite());
+        SetCharacterName(Dialogues[DialoguesIndex].GetCharName());
     }
 
     private void BackgroundOn()
@@ -131,6 +136,15 @@ public class DialogueManager : MonoBehaviour
         CharacterName.text = text;
     }
 
+    private void InteractPromptOff()
+    {
+        InteractPrompt.text = "";
+    }
+    private void InteractPromptOn()
+    {
+        InteractPrompt.text = "Press E to Continue";
+    }
+
     public bool IsDialogueOngoing()
     {
         return IsDialogueActive;
@@ -139,7 +153,18 @@ public class DialogueManager : MonoBehaviour
 
 public struct Dialogue
 {
-    public string text;
-    public string charName;
-    public int charSpriteIndex;
+    private string text;
+    private string charName;
+    private Sprite sprite;
+
+    public Dialogue(string aText, string aName, Sprite aSprite)
+    {
+        text = aText;
+        charName = aName;
+        sprite = aSprite;
+    }
+
+    public string GetText() => text;
+    public string GetCharName() => charName;
+    public Sprite GetSprite() => sprite;
 }
