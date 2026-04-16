@@ -11,5 +11,7 @@ public class ProgressManager : MonoBehaviour
     // 6) Boost up onto seat
     // 7) Seat reclines
     // 8) 1 big enemy spawns in
-    // 9) Dialogue: We did it ig
+    // 9) Dialogue: We did it ig 
+
+
 }

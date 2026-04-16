@@ -57,11 +57,31 @@ public class EnemyManager : MonoBehaviour
     }
     private void Wave03()
     {
+        List<EnemyHealth> eh_list = new List<EnemyHealth>();
 
+        eh_list.Add(Instantiate(EnemyOriginal, new Vector3(130, 40, -60), Quaternion.identity).GetComponent<EnemyHealth>());
+
+        // Every time the enemy dies, there is a check in this script to see if the wave is done.
+        foreach (EnemyHealth e in eh_list)
+        {
+            e.OnEnemyDeath += EndFightCheck;
+        }
+
+        EnemiesLeft = eh_list.Count;
     }
     private void Wave04()
     {
+        List<EnemyHealth> eh_list = new List<EnemyHealth>();
 
+        eh_list.Add(Instantiate(EnemyOriginal, new Vector3(0, 75, -180), Quaternion.identity).GetComponent<EnemyHealth>());
+
+        // Every time the enemy dies, there is a check in this script to see if the wave is done.
+        foreach (EnemyHealth e in eh_list)
+        {
+            e.OnEnemyDeath += EndFightCheck;
+        }
+
+        EnemiesLeft = eh_list.Count;
     }
 
     private void EndFightCheck()
