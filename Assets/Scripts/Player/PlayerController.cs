@@ -141,8 +141,13 @@ public class PlayerController : MonoBehaviour
 
         if (context.performed)
         {
-            Debug.Log("Attack pressed");
+            //Debug.Log("Attack pressed");
 
+            /*
+             * 
+             * GUN SHOT HERE
+             * 
+             */
 
 
             RaycastHit hit;
@@ -162,7 +167,15 @@ public class PlayerController : MonoBehaviour
                 if (!hit.transform.gameObject.TryGetComponent(out enemyHealth)) Debug.Log("A GameObject with the Enemy LayerMask was shot at but it does not have an EnemyHealth component");
                 else
                 {
-                    Debug.Log("Enemy Hit");
+                    //Debug.Log("Enemy Hit");
+
+                    /*
+                     * 
+                     *  ENEMY HIT HERE
+                     * 
+                     * 
+                     */
+
 
                     enemyHealth.ChangeHealth(ShootingDamage * -1);
                 }
