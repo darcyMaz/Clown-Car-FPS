@@ -7,7 +7,8 @@ public class SoundManager : MonoBehaviour
         GUNSHOT,
         SPLAT,
         TADAA, // plays when the player wins the game
-        THROW
+        THROW,
+        FOOTSTEPS
     }
 
     [SerializeField] private AudioClip[] soundList;

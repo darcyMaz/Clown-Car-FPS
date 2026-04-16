@@ -10,3 +10,5 @@ Throw: https://pixabay.com/sound-effects/film-special-effects-punch-1-166694/
 Gunshot: https://pixabay.com/sound-effects/film-special-effects-gunshot-352466/
 
 Tadaa: https://pixabay.com/sound-effects/musical-tadaa-47995/
+
+Bullet hit: https://pixabay.com/sound-effects/film-special-effects-bulletimpact2-442718/

@@ -143,11 +143,7 @@ public class PlayerController : MonoBehaviour
         {
             //Debug.Log("Attack pressed");
 
-            /*
-             * 
-             * GUN SHOT HERE
-             * 
-             */
+            SoundManager.PlaySound(SoundManager.SFX.GUNSHOT);
 
 
             RaycastHit hit;

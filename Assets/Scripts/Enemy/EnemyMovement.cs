@@ -45,7 +45,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (animator.GetBool("isRunning"))
         {
-
+            SoundManager.PlaySound(SoundManager.SFX.FOOTSTEPS);
         }
     }
 
