@@ -8,7 +8,8 @@ public class SoundManager : MonoBehaviour
         SPLAT,
         TADAA, // plays when the player wins the game
         THROW,
-        FOOTSTEPS
+        FOOTSTEPS,
+        BULLETHIT
     }
 
     [SerializeField] private AudioClip[] soundList;

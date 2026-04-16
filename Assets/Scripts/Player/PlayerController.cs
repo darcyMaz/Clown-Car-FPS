@@ -165,12 +165,7 @@ public class PlayerController : MonoBehaviour
                 {
                     //Debug.Log("Enemy Hit");
 
-                    /*
-                     * 
-                     *  ENEMY HIT HERE
-                     * 
-                     * 
-                     */
+                    SoundManager.PlaySound(SoundManager.SFX.BULLETHIT);
 
 
                     enemyHealth.ChangeHealth(ShootingDamage * -1);
