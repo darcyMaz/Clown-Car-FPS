@@ -41,10 +41,11 @@ public class EnemyMovement : MonoBehaviour
         else HasAnimator = true;
     }
 
-    private void Start()
+    private void Update()
     {
-        if (HasAgent)
+        if (animator.GetBool("isRunning"))
         {
+
         }
     }
 
